@@ -25,15 +25,13 @@ const int displays = 3;
 const int columns = 8;
 int HOURGLASS_DEVICES_DOWN[displays] = { 1, 2, 3 };
 int HOURGLASS_DEVICES_UP[displays] = { 2, 1, 0  };
-int UP_HOURGLASS[displays][columns]= {{ 255, 255, 255, 255, 129, 129, 129, 255 },{ 129, 66, 36, 24, 24, 60, 126, 255 },{ 255, 129, 129, 129, 129, 129, 129, 129 }};
-int DOWN_HOURGLASS[displays][columns] = {{ 255, 129, 129, 129, 255, 255, 255, 255 },{ 255, 126, 60, 24, 24, 36, 66, 129 },{ 129, 129, 129, 129, 129, 129, 129, 255 }};
-
-bool blink = true;
+int UP_HOURGLASS[displays][columns]= {{ 254, 254, 254, 254, 130, 130, 130, 254 },{ 130, 130, 68, 40, 56, 124, 254, 254 },{ 254, 130, 130, 130, 130, 130, 130, 130 }};
+int DOWN_HOURGLASS[displays][columns] = {{ 127, 65, 65, 65, 127, 127, 127, 127 },{ 127, 127, 62, 28, 20, 34, 65, 65 },{ 65, 65, 65, 65, 65, 65, 65, 127 }};
 
 int work = 3;
 int shortBreak = 1;
 int longBreak = 2;
-int counter = 0;
+double counter = 0;
 int breakCounter = 1;
 bool displayResetted = true;
 
@@ -50,7 +48,7 @@ void loop() {
   if (displayResetted) {
     getOrientation();  
   }
-  delay(1000);
+  delay(250);
 }
 
 void matrixOnOff() {
@@ -90,7 +88,7 @@ void getOrientation() {
 
 void printClock(bool reversed) {
   myRTC.updateTime();
-  char delimeter = blink ? ':' : ' ';
+  char delimeter = myRTC.seconds % 2 == 0 ? ':' : ' ';
   char timeText[5];
   char format[11] = {'%', '0', '2', 'd', delimeter, '%', '0', '2', 'd'};
   sprintf(timeText, format, myRTC.hours, myRTC.minutes);
@@ -108,14 +106,13 @@ void printClock(bool reversed) {
   }
   
   mx.update(MD_MAX72XX::ON);
-  blink = !blink;
 }
 
 void printCountdown(boolean upDown) {
   char timeText[2];
   char format[11] = {'%', '0', '2', 'd' };
   int *countdownTime;
-  counter += 1;
+  counter += 0.25;
   mx.clear();
   mx.update(MD_MAX72XX::OFF);
   mx.setFont(small);
@@ -173,6 +170,15 @@ void printHourglass(int devices[], int positions[displays][columns]){
       mx.setColumn(devices[i], j, positions[i][j]);
     }
   }
+  animateSand(devices);
+}
+
+void animateSand(int devices[]){
+  Serial.println(mx.getColumnCount());
+  for (int i = 0; i < sizeof(devices) - 0; i++){
+    int on = counter / 0.25;
+    mx.setPoint(4, i + 6, (on % 2 == 0) );
+}
 }
 
 void displayBlinker(bool upDown) {
