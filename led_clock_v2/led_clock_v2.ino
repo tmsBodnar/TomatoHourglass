@@ -48,6 +48,7 @@ void loop() {
   if (displayResetted) {
     getOrientation();  
   }
+  counter += 0.25;
   delay(250);
 }
 
@@ -88,7 +89,7 @@ void getOrientation() {
 
 void printClock(bool reversed) {
   myRTC.updateTime();
-  char delimeter = myRTC.seconds % 2 == 0 ? ':' : ' ';
+  char delimeter = fmod(counter,1) == 0.0 ? ':' : ' ';
   char timeText[5];
   char format[11] = {'%', '0', '2', 'd', delimeter, '%', '0', '2', 'd'};
   sprintf(timeText, format, myRTC.hours, myRTC.minutes);
@@ -112,7 +113,7 @@ void printCountdown(boolean upDown) {
   char timeText[2];
   char format[11] = {'%', '0', '2', 'd' };
   int *countdownTime;
-  counter += 0.25;
+  
   mx.clear();
   mx.update(MD_MAX72XX::OFF);
   mx.setFont(small);
@@ -174,11 +175,14 @@ void printHourglass(int devices[], int positions[displays][columns]){
 }
 
 void animateSand(int devices[]){
-  Serial.println(mx.getColumnCount());
-  for (int i = 0; i < sizeof(devices) - 0; i++){
-    int on = counter / 0.25;
-    mx.setPoint(4, i + 6, (on % 2 == 0) );
-}
+  for (int i = 11; i > 1 - 0; i--) {
+    if (i % 3 == 0){
+      mx.setPoint(4, i, fmod(counter,0.5) == 0 );  
+    } else {
+      mx.setPoint(4, i, false);
+    }
+    
+  }
 }
 
 void displayBlinker(bool upDown) {
