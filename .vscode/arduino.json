@@ -1,0 +1,7 @@
+{
+    "configuration": "cpu=atmega328",
+    "board": "arduino:avr:nano",
+    "programmer": "arduino:avrispmkii",
+    "port": "/dev/ttyUSB0",
+    "sketch": "led_clock_v2/led_clock_v2.ino"
+}

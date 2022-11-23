@@ -3,6 +3,8 @@
 #include <Adafruit_LSM303_Accel.h>
 #include <Adafruit_Sensor.h>
 #include "NormalSmallFonts.h"
+#include <Arduino.h>
+
 
 #define HARDWARE_TYPE MD_MAX72XX::FC16_HW
 #define MAX_DEVICES 4
@@ -28,9 +30,9 @@ int HOURGLASS_DEVICES_UP[displays] = { 2, 1, 0  };
 int UP_HOURGLASS[displays][columns]= {{ 254, 254, 254, 254, 130, 130, 130, 254 },{ 130, 130, 68, 40, 56, 124, 254, 254 },{ 254, 130, 130, 130, 130, 130, 130, 130 }};
 int DOWN_HOURGLASS[displays][columns] = {{ 127, 65, 65, 65, 127, 127, 127, 127 },{ 127, 127, 62, 28, 20, 34, 65, 65 },{ 65, 65, 65, 65, 65, 65, 65, 127 }};
 
-int work = 3;
-int shortBreak = 1;
-int longBreak = 2;
+int work = 25;
+int shortBreak = 5;
+int longBreak = 10;
 double counter = 0;
 int breakCounter = 1;
 bool displayResetted = true;
@@ -129,13 +131,13 @@ void printCountdown(boolean upDown) {
     rotateCW(3);
     rotateCW(3);
     rotateCW(3);
-    calculateHourglass(HOURGLASS_DEVICES_UP, UP_HOURGLASS, *countdownTime);
+    calculateHourglass(HOURGLASS_DEVICES_UP, UP_HOURGLASS, *countdownTime, upDown);
   } else {
     sprintf(timeText, format, work);
     countdownTime = &work;
     drawClockOrCountdown(COUNTDOWN_ARRAY_SIZE, WORK_COL_POSITIONS, timeText);
     rotateCW(0);
-    calculateHourglass(HOURGLASS_DEVICES_DOWN, DOWN_HOURGLASS, *countdownTime);
+    calculateHourglass(HOURGLASS_DEVICES_DOWN, DOWN_HOURGLASS, *countdownTime, upDown);
   }
   
   mx.update(MD_MAX72XX::ON); 
@@ -161,27 +163,49 @@ void drawClockOrCountdown(int arraySize, int positionArray[], char textArray[]){
     }
 }
 
-void calculateHourglass(int devices[], int positions[displays][columns], int countdownTime){
-  printHourglass(devices, positions);
+void calculateHourglass(int devices[], int positions[displays][columns], int countdownTime, bool upDown){
+  printHourglass(devices, positions, countdownTime, upDown);
 }
 
-void printHourglass(int devices[], int positions[displays][columns]){
+void printHourglass(int devices[], int positions[displays][columns], int countdownTime, bool upDown){
   for (int i = 0; i < displays; i ++) {
     for (int j = columns - 1; j >= 0; j--) {
       mx.setColumn(devices[i], j, positions[i][j]);
     }
   }
-  animateSand(devices);
+  animateSand(devices, positions, countdownTime, upDown);
 }
 
-void animateSand(int devices[]){
-  for (int i = 11; i > 1 - 0; i--) {
-    if (i % 3 == 0){
-      mx.setPoint(4, i, fmod(counter,0.5) == 0 );  
-    } else {
-      mx.setPoint(4, i, false);
+void animateSand(int devices[],int positions[displays][columns], int countdownTime, bool upDown){
+  for (int columnIndx = 11; columnIndx > 1; columnIndx--) { 
+  if (upDown) { // break
+    float i = 7;
+    uint8_t val1 = 248;
+    uint8_t val2 = 129;
+    while (i > 0 ) {
+      mx.update(MD_MAX72XX::OFF);
+      if (val2 < 130 ) {
+        if (i > 1 ) {
+          val2 = int(pow(2, i)) + 2;
+        } else {
+          val2 = int(pow(2, i)) + 1;
+        }
+        Serial.print(i);
+        Serial.println(val2);
+        mx.setRow(devices[1], 4, val1);
+        mx.setRow(devices[2], 4, val2);
+        i --;
+  //    } if (i < 0){
+//        i = 5;
+      }
+      mx.update(MD_MAX72XX::ON);
+      delay(500);
     }
-    
+   
+  } else { // work
+    mx.setRow(devices[2], 3, 0b10100100);
+    mx.setRow(devices[1], 3, 0b10011111);
+  }
   }
 }
 
@@ -210,9 +234,9 @@ void displayBlinker(bool upDown) {
 }
 
 void resetCountdown() {
-  work = 3;
-  shortBreak = 1;
-  longBreak = 2;
+  work = 25;
+  shortBreak = 5;
+  longBreak = 1;
   counter = 0;
   displayResetted = false;
 }

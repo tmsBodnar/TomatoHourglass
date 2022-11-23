@@ -1,0 +1,27 @@
+{
+  "configurations": [
+    {
+      "name": "Linux",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "/home/tms/arduino-1.8.16/libraries/**",
+        "/home/tms/arduino-1.8.16/libraries/Adafruit_Unified_Sensor",
+        "/home/tms/arduino-1.8.16/libraries/ArduinoRTClibrary-master",
+        "/home/tms/arduino-1.8.16/libraries/Adafruit_LSM303_Accel",
+        "/home/tms/arduino-1.8.16/libraries/MD_MAX72XX/src",
+        "/home/tms/arduino-1.8.16/hardware/arduino/avr/libraries/Wire/src/",
+        "/home/tms/arduino-1.8.16/hardware/arduino/avr/libraries/SPI/src/",
+        "/home/tms/arduino-1.8.16/hardware/arduino/avr/cores/arduino/",
+        "/home/tms/arduino-1.8.16/hardware/tools/avr/avr/include/avr/",
+        "/home/tms/arduino-1.8.16/hardware/tools/avr/avr/include",
+        "/home/tms/arduino-1.8.16/hardware/arduino/avr/variants/standard/"
+      ],
+      "defines": ["ARDUINO=181", "USBCON"],
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu17",
+      "cppStandard": "gnu++14",
+      "intelliSenseMode": "linux-gcc-x64"
+    }
+  ],
+  "version": 4
+}
