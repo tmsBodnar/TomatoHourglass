@@ -4,14 +4,14 @@ Hourglass and Tomato-timer with arduino
 
 I made this timer for my efficient work.
 
-###Parts
+### Parts
 The Tomato Hourglass built from:
 * Arduino nano
 * 4 x MD MAX7200 8x8 Led MAtrix
 * 9 DOF Orientation Sensor
 * RTC Real Time Clock module
 
-###Features
+### Features
 The Tomato Hourglass have the following features:
 * Mesaures work (25 min), short break (5 min), long break (10min) times
 * Three position of orientation:
@@ -20,7 +20,7 @@ The Tomato Hourglass have the following features:
 * * Break time measuring
 
 -----
-###Functions:
+### Functions:
 In Normal position shows the digital clock with 24H format
 In Standing position firstly starts measuring the work time. 
 * the remaining time shown
@@ -30,6 +30,7 @@ After turning, measure the break time, first short break, then again, and third 
 Can allways reset the Tomato Timer to put the device in normal position (clock)
 
 ----
-Todos:
+### TODO
+Remaining works:
 needs a 3D printed case
 needs to bugfixing in arduino code
