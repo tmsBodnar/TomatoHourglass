@@ -32,11 +32,9 @@ Can allways reset the Tomato Timer to put the device in normal position (clock)
 ----
 ### TODO
 Remaining works:
-needs a 3D printed case
-needs to bugfixing in arduino code
+- [] needs a 3D printed case
+- [] needs to bugfixing in arduino code
 
 ----
 ### Contact me
-<i class="fa fa-github fa-fw">
-<i class="fa fa-linkedin fa-fw">
-<i class="fa fa-envelope-square fa-fw">
+[http://www.kalandlabor.hu]
